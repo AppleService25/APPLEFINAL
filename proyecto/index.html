@@ -3,9 +3,139 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tienda en Línea - Inicio de Sesión</title>
+    <title>Registro de Usuarios</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/styles.css">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f2f2f7;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        header {
+            background-color: #fff;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .nav-links {
+            list-style: none;
+            display: flex;
+            gap: 20px;
+        }
+
+        .nav-links li {
+            display: inline;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            padding: 8px 16px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            background-color: #e0e0e0;
+        }
+
+        main {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 20px;
+        }
+
+        .login-container {
+            background-color: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 24px;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        input[type="text"], input[type="password"] {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 16px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #0071e3;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #005bb5;
+        }
+
+        p {
+            margin-top: 12px;
+        }
+
+        a {
+            color: #0071e3;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        footer {
+            background-color: #fff;
+            padding: 20px;
+            text-align: center;
+            font-size: 14px;
+            color: #666;
+            box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+        }
+    </style>
 </head>
 <body>
     <header>
@@ -21,14 +151,11 @@
 
     <main>
         <section class="login-container">
-            <div class="apple-logo"></div>
-            <h1>Inicia sesión en tu cuenta</h1>
-            <form id="login-form">
-                <input type="text" id="email" placeholder="Correo o número telefónico" required>
+            <h1>Registra tus datos</h1>
+            <form id="register-form">
+                <input type="text" id="email" placeholder="Correo electrónico" required>
                 <input type="password" id="password" placeholder="Contraseña" required>
-                <button type="submit">Iniciar sesión</button>
-                <p><a href="#">¿Olvidaste la contraseña?</a></p>
-                <p><a href="registro.html">¿No tienes cuenta? Regístrate</a></p>
+                <button type="submit">Registrar</button>
             </form>
         </section>
     </main>
@@ -37,6 +164,36 @@
         <p>&copy; 2025 iServiceGlobal. Todos los derechos reservados.</p>
     </footer>
 
-    <script type="module" src="js/scripts.js"></script>
+    <script type="module">
+        document.getElementById("register-form").addEventListener("submit", async (event) => {
+            event.preventDefault();
+
+            const email = document.getElementById("email").value;
+            const password = document.getElementById("password").value;
+
+            try {
+                const response = await fetch("http://127.0.0.1:5000/register", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        correo: email,
+                        contrasena: password
+                    })
+                });
+
+                if (response.ok) {
+                    alert("¡Usuario registrado exitosamente!");
+                } else {
+                    const data = await response.json();
+                    alert(`Error: ${data.error}`);
+                }
+            } catch (error) {
+                console.error("Error en la solicitud:", error);
+                alert("Hubo un problema al conectar con el servidor.");
+            }
+        });
+    </script>
 </body>
 </html>
